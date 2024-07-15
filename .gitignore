@@ -1,4 +1,7 @@
-data/
+data/**/
+data/*.json
+data/*.txt
+data/*.html
 __pycache__/
 *.pyc
 db.sqlite3
