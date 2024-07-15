@@ -1,0 +1,24 @@
+{% extends "music/base_generic.html" %}
+
+{% block content %}
+  <h1>{{ singer.singer_name }}</h1>
+  <p><strong>原始链接:</strong> <a href="{{ singer.original_url }}" target="_blank">点击这里</a></p>
+  <p><img src="{{ singer.image_url }}" alt="{{ singer.singer_name }}"></p>
+  <p><strong>歌曲列表</strong></p>
+  <ul class="search-results">
+    {% for song in singer.songs.all %}
+      <li>
+        <div class="result-content">
+          <div class="result-text">
+            <a href="{% url 'song_detail' song.song_id %}">{{ song.song_name }}</a>
+          </div>
+          <div class="result-image">
+            <img src="{{ song.image_url }}" alt="{{ song.song_name }}">
+          </div>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+  <p><strong>简介:</strong></p>
+  <p>{{ singer.bio|safe }}</p>
+{% endblock %}

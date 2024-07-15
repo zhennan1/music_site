@@ -1,0 +1,18 @@
+{% extends "music/base_generic.html" %}
+
+{% block content %}
+  <h1>搜索</h1>
+  
+  <form method="get" action="{% url 'search' %}">
+    <input type="text" name="q" value="{{ query|default_if_none:'' }}" maxlength="20" placeholder="请输入关键词">
+    <div>
+      <label><input type="radio" name="type" value="song" {% if search_type == 'song' %}checked{% endif %}> 搜索歌曲</label>
+      <label><input type="radio" name="type" value="singer" {% if search_type == 'singer' %}checked{% endif %}> 搜索歌手</label>
+    </div>
+    <button type="submit">搜索</button>
+  </form>
+  
+  {% if error %}
+    <p style="color: red;">{{ error }}</p>
+  {% endif %}
+{% endblock %}

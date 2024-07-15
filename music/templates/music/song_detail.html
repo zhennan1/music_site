@@ -1,0 +1,30 @@
+{% extends "music/base_generic.html" %}
+
+{% block content %}
+  <h1>{{ song.song_name }}</h1>
+  <p><strong>原始链接:</strong> <a href="{{ song.original_url }}" target="_blank">点击这里</a></p>
+  <p><strong>歌手:</strong> <a href="{% url 'singer_detail' song.singer.singer_id %}">{{ song.singer.singer_name }}</a></p>
+  <p><img src="{{ song.image_url }}" alt="{{ song.song_name }}"></p>
+  <p><strong>歌词:</strong></p>
+  <p>{{ song.lyrics|linebreaks }}</p>
+
+  <h2>评论</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">提交评论</button>
+  </form>
+
+  <ul>
+    {% for comment in comments %}
+      <li>
+        <p>{{ comment.text }}</p>
+        <p><em>{{ comment.created_at }}</em></p>
+        <form method="post" action="{% url 'delete_comment' comment.id %}">
+          {% csrf_token %}
+          <button type="submit">删除</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

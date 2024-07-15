@@ -1,0 +1,84 @@
+{% extends "music/base_generic.html" %}
+
+{% block content %}
+  <h1>搜索</h1>
+  
+  <form method="get" action="{% url 'search' %}">
+    <input type="text" name="q" value="{{ query|default_if_none:'' }}" maxlength="20" placeholder="请输入关键词">
+    <div>
+      <label><input type="radio" name="type" value="song" {% if search_type == 'song' or not search_type %}checked{% endif %}> 搜索歌曲</label>
+      <label><input type="radio" name="type" value="singer" {% if search_type == 'singer' %}checked{% endif %}> 搜索歌手</label>
+    </div>
+    <br>
+    <button type="submit">搜索</button>
+  </form>
+  
+  {% if query %}
+    <p>搜索用时: <strong>{{ elapsed_time }}</strong> 秒</p>
+    <p>共找到 <strong>{{ result_count }}</strong> 个结果</p>
+
+    <ul class="search-results">
+      {% if search_type == 'song' %}
+        {% for result in page_obj %}
+          <li>
+            <div class="result-content">
+              <div class="result-text">
+                <a href="{% url 'song_detail' result.song_id %}">{{ result.song_name }}</a>
+              </div>
+              <div class="result-image">
+                <img src="{{ result.image_url }}" alt="{{ result.song_name }}">
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      {% else %}
+        {% for result in page_obj %}
+          <li>
+            <div class="result-content">
+              <div class="result-text">
+                <a href="{% url 'singer_detail' result.singer_id %}">{{ result.singer_name }}</a>
+              </div>
+              <div class="result-image">
+                <img src="{{ result.image_url }}" alt="{{ result.singer_name }}">
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      {% endif %}
+    </ul>
+
+    <div class="pagination">
+      <span class="step-links">
+        <a href="?q={{ query }}&type={{ search_type }}&page=1">&laquo; 首页</a>
+        {% if page_obj.has_previous %}
+          <a href="?q={{ query }}&type={{ search_type }}&page={{ page_obj.previous_page_number }}">上一页</a>
+        {% endif %}
+
+        {% for num in display_pages %}
+          {% if num %}
+            {% if num == page_obj.number %}
+              <span class="current">{{ num }}</span>
+            {% else %}
+              <a href="?q={{ query }}&type={{ search_type }}&page={{ num }}">{{ num }}</a>
+            {% endif %}
+          {% else %}
+            <span>...</span>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+          <a href="?q={{ query }}&type={{ search_type }}&page={{ page_obj.next_page_number }}">下一页</a>
+        {% endif %}
+        <a href="?q={{ query }}&type={{ search_type }}&page={{ page_obj.paginator.num_pages }}">尾页 &raquo;</a>
+      </span>
+    </div>
+
+    <form method="get" action="{% url 'search' %}">
+      <input type="hidden" name="q" value="{{ query }}">
+      <input type="hidden" name="type" value="{{ search_type }}">
+      <label for="page">跳转到页码：</label>
+      <input type="number" id="page" name="page" min="1" max="{{ page_obj.paginator.num_pages }}">
+      <button type="submit">跳转</button>
+    </form>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "music/base_generic.html" %}
+
+{% block content %}
+  <h1>歌曲列表</h1>
+
+  <ul class="search-results">
+    {% for song in page_obj %}
+      <li>
+        <div class="result-content">
+          <div class="result-text">
+            <a href="{% url 'song_detail' song.song_id %}">{{ song.song_name }}</a>
+          </div>
+          <div class="result-image">
+            <img src="{{ song.image_url }}" alt="{{ song.song_name }}">
+          </div>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <div class="pagination">
+    <span class="step-links">
+      <a href="?q={{ query }}&page=1">&laquo; 首页</a>
+      {% if page_obj.has_previous %}
+        <a href="?q={{ query }}&page={{ page_obj.previous_page_number }}">上一页</a>
+      {% endif %}
+
+      {% for num in display_pages %}
+        {% if num %}
+          {% if num == page_obj.number %}
+            <span class="current">{{ num }}</span>
+          {% else %}
+            <a href="?q={{ query }}&page={{ num }}">{{ num }}</a>
+          {% endif %}
+        {% else %}
+          <span>...</span>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a href="?q={{ query }}&page={{ page_obj.next_page_number }}">下一页</a>
+      {% endif %}
+      <a href="?q={{ query }}&page={{ page_obj.paginator.num_pages }}">尾页 &raquo;</a>
+    </span>
+  </div>
+
+  <form method="get" action="{% url 'song_list' %}">
+    <input type="hidden" name="q" value="{{ query }}">
+    <label for="page">跳转到页码：</label>
+    <input type="number" id="page" name="page" min="1" max="{{ page_obj.paginator.num_pages }}">
+    <button type="submit">跳转</button>
+  </form>
+{% endblock %}

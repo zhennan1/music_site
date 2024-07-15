@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Music Site</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'music/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h2>Music Site</h2>
+        <nav>
+            <a href="{% url 'song_list' %}">歌曲列表</a>
+            <a href="{% url 'singer_list' %}">歌手列表</a>
+            <a href="{% url 'search' %}">搜索</a>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>
