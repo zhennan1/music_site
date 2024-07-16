@@ -15,6 +15,10 @@ def extract_singer_info(file_content):
     bio_match = re.search(r'<h3 class="popup_data_detail__tit">歌手简介</h3>(.*?)</div><i class="popup_data_detail__arrow">', file_content, re.S)
     bio = bio_match.group(1).strip() if bio_match else ""
     
+    # 提取粉丝数量
+    fans_match = re.search(r'关注\s*<span>([\d\.万]+)</span>', file_content)
+    fans = fans_match.group(1).strip() if fans_match else ""
+    
     # 提取歌曲信息
     songs = []
     for song_match in re.findall(r'href="/n/ryqq/songDetail/(\w+)">([^<]+)</a>', file_content):
@@ -26,7 +30,7 @@ def extract_singer_info(file_content):
             "original_url": song_original_url
         })
     
-    return name, image_url, bio, songs
+    return name, image_url, bio, fans, songs
 
 def process_folder(folder_path):
     singers = []
@@ -39,7 +43,7 @@ def process_folder(folder_path):
             with open(file_path, 'r', encoding='utf-8') as file:
                 file_content = file.read()
             
-            name, image_url, bio, songs = extract_singer_info(file_content)
+            name, image_url, bio, fans, songs = extract_singer_info(file_content)
             original_url = f"https://y.qq.com/n/ryqq/singer/{singer_id}"
             
             singer_info = {
@@ -47,6 +51,7 @@ def process_folder(folder_path):
                 "singer_name": name,
                 "image_url": image_url,
                 "bio": bio,
+                "fans": fans,
                 "original_url": original_url,
                 "songs": songs
             }
