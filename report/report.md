@@ -44,6 +44,8 @@
 
 Requests库：用于发送HTTP请求以获取网页内容。
 
+获取歌词：参考了lyric-crawler https://github.com/godweiyang/lyric-crawler
+
 **数据清洗**
 
 字符串处理：使用正则表达式和字符串方法清洗爬取到的数据，如提取歌手名字、歌词、粉丝数量等。
