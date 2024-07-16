@@ -44,7 +44,7 @@
 
 Requests库：用于发送HTTP请求以获取网页内容。
 
-获取歌词：参考了lyric-crawler https://github.com/godweiyang/lyric-crawler
+获取歌词：参考了 [lyric-crawler](https://github.com/godweiyang/lyric-crawler)
 
 **数据清洗**
 
